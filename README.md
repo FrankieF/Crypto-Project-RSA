@@ -1,2 +1,2 @@
 # Crypto-Project-RSA
-This project is being create the RSA cryptosystem which is used for secure data transmission.
+The goal for this project is to create the RSA cryptosystem which is used for secure data transmission.
