@@ -3,7 +3,7 @@ package project_3;
 /**
  * RSA is a class that mimics the RSA cryptosystem which is used for secure
  * data transmission.
- * @author Travis Buff
+ * @author Travis Buff, Frankie Fasola, Eric Carpizo
  */
 public class RSA {
 	
