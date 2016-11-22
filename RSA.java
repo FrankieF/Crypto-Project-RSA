@@ -1,15 +1,23 @@
 package project_3;
 
+import java.util.Random;
+
 /**
  * RSA is a class that mimics the RSA cryptosystem which is used for secure
  * data transmission.
  * @author Travis Buff, Frankie Fasola, Eric Carpizo
+ * 11-22-2016
  */
-public class RSA {
-	
-	public static void main(String[] args){
+
+public class RSA
+{
+	public static void main(String[] args) {
 		System.out.println(modPower(75,1,17));
 		System.out.println(inverse(17,75));
+		RSA rsa = new RSA();
+		int n = 20;
+//		int a = rsa.generatePrime();
+//		System.out.println("A: " + a);
 	}
 	
 	public RSA(){}
@@ -75,4 +83,78 @@ public class RSA {
 		}
 		return result % m;
 	}
+	
+	/***
+	 * Generates a random prime number in the range of m - n.
+	 * @author Francis Fasola
+	 * @param m The lower bound.
+	 * @param The upper bound.
+	 * @return Random prime number.
+	 */
+	public long randPrime(int m, int n, Random rand) {
+		boolean isPrime = false;
+		int number = 0;
+		// nextInt takes an upper bound, so we calculate the range where our number can be
+		// Then we add the lower bound to make our number in the specified range.
+		int range = n - m;
+		while(!isPrime) {
+			number = rand.nextInt(range) + m;
+			isPrime = isPrime(number);
+		}
+		return number;			
+	}
+
+	/***
+	 * @author Francis Fasola
+	 * Checks if a number is prime.
+	 * @param number The number to check for primality.
+	 * @return true if number is prime.
+	 */
+	public static boolean isPrime(int number) {
+		// Cache the square root of the number,
+		// then check all values of 2 - root
+		double root = Math.sqrt(number);
+		for(int i = 2; i < root; i++) {
+			if(number % i == 0)
+				return false;
+		}
+		return true;
+	}
+	
+	/***
+	 * @author Francis Fasola
+	 * Finds a number between 2 - n-1 that is relatively prime to n.
+	 * @param n The upper bound for searching.
+	 * @return A number relatively prime to n.
+	 */
+	public long relPrime(long n, Random rand) {
+		long number = 0;
+		long bound = n;
+		boolean isRelPrime = false;
+		// Generate a random number
+		// Then check if the number is relatively prime to n
+		while(!isRelPrime) {
+			number = (long)(rand.nextDouble() * bound);
+			//System.out.println("num: " + number + " n: " + n);
+			if(number > 1 && GCF(number, n) == 1) isRelPrime = true;
+		}
+		return number;
+	}
+	
+	/***
+	 * @author Francis Fasola
+	 * Determins the greatest common factor of two numbers.
+	 * @param a First number.
+	 * @param b Second number.
+	 * @return The greatest common factor.
+	 */
+	private long GCF(long a, long b) {
+		long c = 0;
+		while(b != 0) {
+			c = a;
+			a = b;
+			b = c%b;
+		}
+		return a;
+	}	
 }
