@@ -129,7 +129,7 @@ public class RSA
 	 * @return the number for b^p (mod m)
 	 */
 	public static long modPower(long b, long p, long m){
-		if(b < 0 || p < 0 || m < 1){
+		if(p < 0 || m < 1){
 			throw new IllegalArgumentException();
 		}
 		long result = 1;
