@@ -1,8 +1,5 @@
 package project_3;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -18,15 +15,10 @@ public class RSA
 
 		Person Alice = new Person();
 		Person Bob = new Person();
-		String a = "ab";
-		//System.out.println("Long: " + RSA.toLong('a', 'b'));
-		long[] arr = Bob.encryptTo(a, Alice);
-		//System.out.println(Arrays.toString(arr));
-		String de = Alice.decrypt(arr);
-		char first = de.charAt(0);
-		char second = de.charAt(1);
-		System.out.println("Tolong returns : " + toLong(first,second));
 
+		/**
+		 * Test 1
+		 */
 		String msg = new String ("Bob, let's have lunch.");   // message to be sent to Bob
 		long []  cipher;
 		cipher =  Alice.encryptTo(msg, Bob);      // encrypted, with Bob's public key
@@ -46,6 +38,54 @@ public class RSA
 		System.out.println ("Bob sends:");
 		show (cipher);
 		System.out.println ("Alice decodes and reads: " + Alice.decrypt (cipher));
+		
+		/**
+		 * Test 2
+		 */
+		Person frank = new Person();
+		Person travis = new Person();
+		
+		msg = new String ("Can you send me the crypto homework?");   // message to be sent to Bob
+		cipher =  frank.encryptTo(msg, travis);      // encrypted, with Bob's public key
+
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Frank sends:");
+		show (cipher);
+
+		System.out.println ("Travis decodes and reads: " + travis.decrypt (cipher));	// decrypted,
+		// with Bob's private key.
+		System.out.println ();
+
+		msg = new String ("No ask Eric.");
+		cipher = travis.encryptTo (msg, frank);
+
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Travis sends:");
+		show (cipher);
+		System.out.println ("Frank decodes and reads: " + frank.decrypt (cipher));
+		
+		/***
+		 * Test 3
+		 */
+		Person eric = new Person();
+		msg = new String ("Eric, what is the crypto homework?");   // message to be sent to Bob
+		cipher =  frank.encryptTo(msg, eric);      // encrypted, with Bob's public key
+
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Frank sends:");
+		show (cipher);
+
+		System.out.println ("Eric decodes and reads: " + eric.decrypt (cipher));	// decrypted,
+		// with Bob's private key.
+		System.out.println ();
+
+		msg = new String ("Problems 1 and 2, in chapte 7.");
+		cipher = eric.encryptTo (msg, frank);
+
+		System.out.println ("Message is: " + msg);
+		System.out.println ("Eric sends:");
+		show (cipher);
+		System.out.println ("Frank decodes and reads: " + frank.decrypt (cipher));
 	}
 
 	/***
@@ -139,7 +179,6 @@ public class RSA
 				result = (result * base) % m;
 			}
 			base = (base * base) % m;
-			//
 			p = p/2;
 		}
 		return result % m;
@@ -224,6 +263,7 @@ public class RSA
 		return a;
 	}	
 	/***
+	 * @author Francis Fasola
 	 * Stores two characters inside of a long.
 	 * @param a The first character to put inside the long.
 	 * @param b The second character to be put inside the long.
@@ -242,6 +282,7 @@ public class RSA
 	}
 
 	/***
+	 * @author Francis Fasola
 	 * Converts a long to a string by extracting the characters inside of it.
 	 * @param x The long storing the value of characters.
 	 * @return A string representation of the characters.
@@ -258,15 +299,6 @@ public class RSA
 		// So we do not check the right
 
 		s  +=""+ left + right;
-
-		/**
-		 * if(left != 0) {
-
-			s += left;
-			if (right != 0)
-				s += right;
-		}
-		 */
 		return s;
 	}
 }
