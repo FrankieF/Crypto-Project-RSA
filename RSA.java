@@ -1,5 +1,8 @@
 package project_3;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -12,16 +15,6 @@ import java.util.Random;
 public class RSA
 {
 	public static void main(String[] args) {
-//		System.out.println(modPower(75,1,17));
-//		System.out.println(inverse(17,75));
-//		RSA rsa = new RSA();
-//		int n = 20;
-////		int a = rsa.generatePrime();
-////		System.out.println("A: " + a);
-		
-		Person Alice = new Person();
-		Person Bob = new Person();
-
 		String msg = new String ("Bob, let's have lunch."); 	// message to be sent to Bob
 		long []  cipher;
 		cipher =  Alice.encryptTo(msg, Bob);			// encrypted, with Bob's public key
@@ -48,11 +41,10 @@ public class RSA
 	 * @author Francis Fasola
 	 * @param cipher The array of cipher text, made up of longs.
 	 */
-	private static void show(long[] cipher)
-		{
+	private static void show(long[] cipher) {
 			String s = "";
 			for (long l : cipher)
-					s = l + " ";
+					s += l + " ";
 			System.out.println(s);
 		}
 
@@ -65,41 +57,24 @@ public class RSA
 	 * @return inverse of e mod m
 	 */
 	public static long inverse(long e, long m){
-		if(e < 1 || m < 1){
-			throw new IllegalArgumentException("Inverse does not allow a mod or base less than 1");
-		}
-		//r1 is used as the numerator to find the next quotient.
-		//r2 is used as the denominator to find the next quotient.
+		//r1/r2 = q and next r2
 		long r1 = m,r2 = e, swap = 0;
-		
-		//used for the euclidean algorithm equation U = uMin2 - q * uMin1.  
 		long u = 0, uMin2 = 0, uMin1 = 1;
-		
-		//used for the euclidean algorithm equation V = vMin2 - q * vMin2.
 		long v = 0, vMin2 = 1, vMin1 = 0;
-		
-		//The qeotient.
 		long q = 0;
-		
-		//finds the inverse using euclidean algorithm.
 		while(r2 != 1){
 			//gets the quotient
 			q = r1/r2;
 			//swap holds value r2 for use later.
 			swap = r2;		
-			
 			//gets the next r2 value
 			r2 = modPower(r1,1,r2);
-			//the previous r2 becomes r1.
 			r1 = swap;
 			
 			u = uMin2 - q * uMin1;
-			//updates the uMin2 and uMin1 for the next loop.
 			uMin2 = uMin1;
 			uMin1 = u;
-			
 			v = vMin2 - q * vMin1;
-			//updates the vMin2 and vMin1 for the next loop
 			vMin2 = vMin1;
 			vMin1 = v;	
 			
@@ -125,18 +100,13 @@ public class RSA
 	 * @return the number for b^p (mod m)
 	 */
 	public static long modPower(long b, long p, long m){
-		if(b < 0 || p < 0 || m < 1){
-			throw new IllegalArgumentException();
-		}
 		long result = 1;
 		long base = b;
 		while (p > 0) {
-			//used for finding and getting rid of low order bit.
 			if (p % 2 == 1) {
 				result = (result * base) % m;
 			}
 			base = (base * base) % m;
-			//
 			p = p/2;
 		}
 		return result % m;
@@ -194,7 +164,7 @@ public class RSA
 		while(!isRelPrime) {
 			number = (long)(rand.nextDouble() * bound);
 			//System.out.println("num: " + number + " n: " + n);
-			if(number > 1 && GCF(number, n) == 1) isRelPrime = true;
+			if(number > 1 && gcf(number, n) == 1) isRelPrime = true;
 		}
 		return number;
 	}
@@ -206,7 +176,7 @@ public class RSA
 	 * @param b Second number.
 	 * @return The greatest common factor.
 	 */
-	private static long GCF(long a, long b) {
+	private static long gcf(long a, long b) {
 		long c = 0;
 		while(b != 0) {
 			c = a;
@@ -215,4 +185,43 @@ public class RSA
 		}
 		return a;
 	}	
+	/***
+	 * Stores two characters inside of a long.
+	 * @param a The first character to put inside the long.
+	 * @param b The second character to be put inside the long.
+	 * @return A long holding the value of both characters.
+	 */
+	public static long toLong(char a, char b) {
+		long l = 0;
+		int left = (int)a;
+		int right = (int)b;
+		// Store the value of the first character
+		// Then move the value to the left and store the second character
+		l += left;
+		l = l << 8;
+		l += right;
+		return l;
+	}
+	
+	/***
+	 * Converts a long to a string by extracting the characters inside of it.
+	 * @param x The long storing the value of characters.
+	 * @return A string representation of the characters.
+	 */
+	public static String longToChars (long x) {
+		// First shift the long 8 to the right and store the value in a char
+		char left = (char)(x >> 8);
+		// Next move the long to the left 8 bits removing the first char,
+		// Then shift the long to the right 8 bits and store the value in a char
+		char right = (char)((x << 8) >> 8);
+		String s = new String();
+		// If the left value is 0, we know the right value is also 0,
+		// So we do not check the right
+		if(left != 0) {
+			s += left;
+			if (right != 0)
+				s += right;
+		}
+		return s;
+	}
 }
