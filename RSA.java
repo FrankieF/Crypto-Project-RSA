@@ -15,6 +15,18 @@ import java.util.Random;
 public class RSA
 {
 	public static void main(String[] args) {
+
+		Person Alice = new Person();
+		Person Bob = new Person();
+		String a = "ab";
+		System.out.println("Long: " + RSA.toLong('a', 'b'));
+		long[] arr = Bob.encryptTo(a, Alice);
+		System.out.println(Arrays.toString(arr));
+		String de = Alice.decrypt(arr);
+		char first = de.charAt(0);
+		char second = de.charAt(1);
+		System.out.println("Tolong returns : " + toLong(first,second));
+
 		String msg = new String ("Bob, let's have lunch."); 	// message to be sent to Bob
 		long []  cipher;
 		cipher =  Alice.encryptTo(msg, Bob);			// encrypted, with Bob's public key
