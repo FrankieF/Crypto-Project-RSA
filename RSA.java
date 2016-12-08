@@ -62,31 +62,48 @@ public class RSA
 
 	public RSA(){}
 	
-	/**
+/**
 	 * Finds the multiplicative inverse of a long int e (mod m).
 	 * @param e is the number that the method will find the inverse of.
 	 * @param m is the mod.
 	 * @return inverse of e mod m
 	 */
 	public static long inverse(long e, long m){
-		//r1/r2 = q and next r2
+		if(e < 1 || m < 1){
+			throw new IllegalArgumentException("Inverse does not allow a mod or base less than 1");
+		}
+		//r1 is used as the numerator to find the next quotient.
+		//r2 is used as the denominator to find the next quotient.
 		long r1 = m,r2 = e, swap = 0;
+		
+		//used for the euclidean algorithm equation U = uMin2 - q * uMin1.  
 		long u = 0, uMin2 = 0, uMin1 = 1;
+		
+		//used for the euclidean algorithm equation V = vMin2 - q * vMin2.
 		long v = 0, vMin2 = 1, vMin1 = 0;
+		
+		//The qeotient.
 		long q = 0;
+		
+		//finds the inverse using euclidean algorithm.
 		while(r2 != 1){
 			//gets the quotient
 			q = r1/r2;
 			//swap holds value r2 for use later.
 			swap = r2;		
+			
 			//gets the next r2 value
 			r2 = modPower(r1,1,r2);
+			//the previous r2 becomes r1.
 			r1 = swap;
 			
 			u = uMin2 - q * uMin1;
+			//updates the uMin2 and uMin1 for the next loop.
 			uMin2 = uMin1;
 			uMin1 = u;
+			
 			v = vMin2 - q * vMin1;
+			//updates the vMin2 and vMin1 for the next loop
 			vMin2 = vMin1;
 			vMin1 = v;	
 			
@@ -112,18 +129,22 @@ public class RSA
 	 * @return the number for b^p (mod m)
 	 */
 	public static long modPower(long b, long p, long m){
+		if(b < 0 || p < 0 || m < 1){
+			throw new IllegalArgumentException();
+		}
 		long result = 1;
 		long base = b;
 		while (p > 0) {
+			//used for finding and getting rid of low order bit.
 			if (p % 2 == 1) {
 				result = (result * base) % m;
 			}
 			base = (base * base) % m;
+			//
 			p = p/2;
 		}
 		return result % m;
 	}
-	
 	/***
 	 * Generates a random prime number in the range of m - n.
 	 * @author Francis Fasola
