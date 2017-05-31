@@ -103,6 +103,7 @@ public class RSA
 	public RSA(){}
 /**
 	 * Finds the multiplicative inverse of a long int e (mod m).
+	 * @author Travis Buff
 	 * @param e is the number that the method will find the inverse of.
 	 * @param m is the mod.
 	 * @return inverse of e mod m
@@ -162,6 +163,7 @@ public class RSA
 	
 	/**
 	 * Raise a number, b, to a power , p, mod m
+	 * @author Travis Buff
 	 * @param b is the base number
 	 * @param p is the power for the base number
 	 * @param m is the mod
